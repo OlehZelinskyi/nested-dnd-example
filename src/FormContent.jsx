@@ -122,17 +122,43 @@ const FormContent = () => {
 
     const updateSpec = createObjByPath({}, specPath, pushTierHandler);
 
-    // if (hierarchicalPath.length === 1) {
-    //   setFieldValue('tiers',
-    //     update(tiers, pushTierHandler)
-    //   )
-    // } else {
     setFieldValue('tiers',
       update(tiers, updateSpec)
     )
-    // }
 
+  }
 
+  const deleteTier = (hierarchicalPath) => {
+    let changeTier = tiers;
+    let specPath = hierarchicalPath.slice(0, hierarchicalPath.length - 1).join('.tiers.') + '.tiers';
+
+    hierarchicalPath.forEach((level, index) => {
+      if (
+        Array.isArray(changeTier[level].tiers)
+        && changeTier[level].tiers.length
+        && index !== hierarchicalPath.length - 1
+      ) {
+        changeTier = changeTier[level].tiers
+      } else {
+        changeTier = changeTier[level]
+      }
+    })
+
+    const removeTierHandler = {
+      $splice: [[hierarchicalPath[hierarchicalPath.length - 1], 1]]
+    }
+
+    const updateSpec = createObjByPath({}, specPath, removeTierHandler);
+
+    if (hierarchicalPath.length === 1) {
+      setFieldValue('tiers',
+        update(tiers, removeTierHandler)
+      )
+    } else {
+      setFieldValue('tiers',
+        update(tiers, updateSpec)
+      )
+    }
   }
 
   const renderTiers = ({tier, index, hPath = []}) => {
@@ -157,7 +183,8 @@ const FormContent = () => {
           <input
             name="lastname"
             value={tier.lastname} type="text" onChange={(e) => onChange(e, hierarchicalPath)}/>
-          <button type="button" onClick={() => addSubTier(hierarchicalPath)}>Add tier</button>
+          <button type="button" onClick={() => addSubTier(hierarchicalPath)}>Add subtier</button>
+          <button type="button" onClick={() => deleteTier(hierarchicalPath)}>Delete tier</button>
           {tier.tiers.map((t, i) => renderTiers({
             tier: t,
             index: i,
@@ -184,8 +211,8 @@ const FormContent = () => {
         <input
           name="lastname"
           value={tier.lastname} type="text" onChange={(e) => onChange(e, hierarchicalPath)}/>
-        <button type="button" onClick={() => addSubTier(hierarchicalPath)}>Add tier</button>
-
+        <button type="button" onClick={() => addSubTier(hierarchicalPath)}>Add subtier</button>
+        <button type="button" onClick={() => deleteTier(hierarchicalPath)}>Delete tier</button>
       </Tier>
     )
   }
