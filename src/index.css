@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html,body,#root,.App {
+  height: 100%;
+}
+
+.tier {
+  margin-left: 0.5rem;
+  padding: 1rem;
+  position: relative;
+  background-color: #f884b7;
+}
+
+
+.dragging {
+  opacity: 0.5;
+  cursor: move;
+}
