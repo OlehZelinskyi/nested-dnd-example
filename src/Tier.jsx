@@ -72,7 +72,7 @@ const Tier = ({children, id, index, moveTiers, hierarchicalPath, color, type}) =
       ref={tierRef}
       data-handler-id={handlerId}
       className={`tier ${isDragging ? 'dragging' : ''}`}
-      style={{backgroundColor: color}}
+      style={{border: `1px solid ${color}`}}
     >
       {children}</div>
   )
